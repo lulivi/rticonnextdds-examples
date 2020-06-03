@@ -1,0 +1,47 @@
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  lint-python:
+    runs-on: ubuntu-18.04
+    name: Python code format check"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install necessary tools
+        run: |
+          pip install black
+      - name: Perform format check
+        working-directory: ${{ github.workspace }}
+        run: black -l 79 --diff --check .
+
+  lint-markdown:
+    runs-on: ubuntu-18.04
+    name: Markdown documents lint
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - name: Install necessary tools
+        run: |
+          gem install mdl -v 0.9.0
+      - name: Perform linting
+        working-directory: ${{ github.workspace }}
+        run: |
+          mdl --style .mdl.rb .
