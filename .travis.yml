@@ -1,3 +1,4 @@
+os: linux
 dist: xenial
 language: python
 python: "3.7"
@@ -14,7 +15,18 @@ before_install:
   - gem install mdl -v 0.9.0
   - pip install Sultan scan-build black
 install:
-  - 'if [ -n "$RTI_MIN_PACKAGE_URL" ]; then resources/travis/linux_install.py; fi'
+  - |
+    if [ -n "$RTI_MIN_PACKAGE_URL" ]; then
+      resources/travis/linux_install.py
+    fi
 script:
-  - 'if [ -n "$RTI_MIN_PACKAGE_URL" ]; then resources/travis/linux_static_analysis.py; fi'
-  - 'if [ -n "$TRAVIS_COMMIT_RANGE" ]; then resources/travis/linux_format.py --commit-range $TRAVIS_COMMIT_RANGE ; else resources/travis/linux_format.py --commit $TRAVIS_COMMIT; fi'
+  - |
+    if [ -n "$RTI_MIN_PACKAGE_URL" ]; then
+      resources/travis/linux_static_analysis.py
+    fi
+  - |
+    if [ -n "$TRAVIS_COMMIT_RANGE" ]; then
+      resources/travis/linux_format.py -md -py -r $TRAVIS_COMMIT_RANGE
+    else
+      resources/travis/linux_format.py -c $TRAVIS_COMMIT
+    fi
