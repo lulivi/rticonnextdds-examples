@@ -7,10 +7,17 @@ on:
     branches:
       - master
       - develop
+    paths:
+      - '**/*.md'
+      - '**/*.py'
+
   pull_request:
     branches:
       - master
       - develop
+    paths:
+      - '**/*.md'
+      - '**/*.py'
 
 jobs:
   lint-python:
@@ -23,8 +30,7 @@ jobs:
         with:
           python-version: 3.7
       - name: Install necessary tools
-        run: |
-          pip install black
+        run: pip install black
       - name: Perform format check
         working-directory: ${{ github.workspace }}
         run: black -l 79 --diff --check .
@@ -34,14 +40,12 @@ jobs:
     name: Markdown documents lint
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+      - name: Set up Node
+        uses: actions/setup-node@v2-beta
         with:
-          ruby-version: 2.6
+          node-version: '14'
       - name: Install necessary tools
-        run: |
-          gem install mdl -v 0.9.0
+        run: npm install markdownlint-cli@0.23.1
       - name: Perform linting
         working-directory: ${{ github.workspace }}
-        run: |
-          mdl --style .mdl.rb .
+        run: markdownlint **/*.md
