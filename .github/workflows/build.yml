@@ -68,12 +68,19 @@ jobs:
         id: pr_number
         run: echo '::set-output name=PR_NUMBER::'$(cat NR)
 
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       # Send an information message to the user that opened the pull request.
       - name: Send information message
         if: ${{ github.event_name == 'workflow_run' }}
         uses: actions/github-script@v3.1.0
         with:
-          github-token: ${{ secrets.APP_TOKEN }}
+          github-token: ${{ steps.generate_token.outputs.token }}
           script: |
             var issue_number = ${{ steps.pr_number.outputs.PR_NUMBER }};
             await github.issues.createComment({
