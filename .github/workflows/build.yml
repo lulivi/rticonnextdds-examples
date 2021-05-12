@@ -73,7 +73,7 @@ jobs:
         if: ${{ github.event_name == 'workflow_run' }}
         uses: actions/github-script@v3.1.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.APP_TOKEN }}
           script: |
             var issue_number = ${{ steps.pr_number.outputs.PR_NUMBER }};
             await github.issues.createComment({
