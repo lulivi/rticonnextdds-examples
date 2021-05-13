@@ -73,7 +73,7 @@ jobs:
         if: ${{ github.event_name == 'workflow_run' }}
         uses: actions/github-script@v3.1.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ github.token }}
           script: |
             var issue_number = ${{ steps.pr_number.outputs.PR_NUMBER }};
             await github.rest.checks.create({
@@ -134,7 +134,7 @@ jobs:
         env:
           ISSUE_NUMBER: ${{ needs.build.outputs.pr_number }}
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ github.token }}
           script: |          
             var issue_number = ${{ needs.build.outputs.pr_number }};
             await octokit.request('POST /repos/ManuelJNunez/rticonnextdds-examples/check-runs', {
