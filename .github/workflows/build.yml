@@ -68,19 +68,27 @@ jobs:
         id: pr_number
         run: echo '::set-output name=PR_NUMBER::'$(cat NR)
 
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       # Send an information message to the user that opened the pull request.
       - name: Send information message
         if: ${{ github.event_name == 'workflow_run' }}
         uses: actions/github-script@v3.1.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ steps.generate_token.outputs.token }}
           script: |
             var issue_number = ${{ steps.pr_number.outputs.PR_NUMBER }};
-            await github.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue_number,
-              body: `The compilation is starting. Take a look [here](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).`
+            await github.rest.checks.create({
+              repo: 'rticonnextdds-examples',
+              owner: 'ManuelJNunez'
+              name: 'build',
+              status: 'in_progress',
+              head_sha: issue_number
             });
 
       # If this workflow was triggered by a push event, it will download the
@@ -133,18 +141,13 @@ jobs:
         env:
           ISSUE_NUMBER: ${{ needs.build.outputs.pr_number }}
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            var message;
-            if ('${{ needs.build.result }}' == 'success')
-              message = 'Everything is OK. Thank you for the PR!';
-            else
-              message = 'Oops, something went wrong!';
-          
+          github-token: ${{ github.token }}
+          script: |          
             var issue_number = ${{ needs.build.outputs.pr_number }};
-            await github.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue_number,
-              body: message,
+            await octokit.request('POST /repos/ManuelJNunez/rticonnextdds-examples/check-runs', {
+              name: 'build',
+              status: 'completed',
+              conclusion: 'success',
+              head_sha: issue_number
             });
+            
