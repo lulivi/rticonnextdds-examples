@@ -76,7 +76,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var issue_number = ${{ steps.pr_number.outputs.PR_NUMBER }};
-            await octokit.request('POST /repos/ManuelJNunez/rticonnextdds-examples/check-runs', {
+            await github.rest.checks.create({
+              repo: 'rticonnextdds-examples',
+              owner: 'ManuelJNunez'
               name: 'build',
               status: 'in_progress',
               head_sha: issue_number
