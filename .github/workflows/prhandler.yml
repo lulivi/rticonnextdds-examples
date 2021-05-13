@@ -23,7 +23,7 @@ jobs:
       - name: Save PR number
         run: |
           mkdir -p ./pr
-          echo ${{ github.event.number }} > ./pr/NR
+          echo ${{ github.sha }} > ./pr/NR
           cp -a examples pr/
           cp -a resources pr/
 
