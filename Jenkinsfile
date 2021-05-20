@@ -1,15 +1,13 @@
 pipeline {
-  agent {
-    docker {
-      dockerfile true
+    agent {
+        dockerfile true
     }
-  }
 
-  stages {
-    stage('Build') {
-      steps {
-        sh 'echo Hi'
-      }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'echo Hi'
+            }
+        }
     }
-  }
 }
