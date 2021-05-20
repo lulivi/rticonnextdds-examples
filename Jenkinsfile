@@ -11,9 +11,6 @@ pipeline {
     stages {
         stage('Download') {
             steps {
-                sh 'pwd'
-                sh 'cmake --version'
-                sh 'echo $RTI_INSTALLATION_PATH'
                 sh 'python resources/ci_cd/linux_install.py'
             }
         }
