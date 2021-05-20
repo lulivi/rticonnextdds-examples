@@ -2,6 +2,7 @@ pipeline {
     agent {
         dockerfile true
     }
+
     environment {
         RTI_MIN_PACKAGE_URL = credentials('rti-min-package-url')
         RTI_PACKAGE_VERSION = credentials('rti-package-version')
