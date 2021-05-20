@@ -19,5 +19,3 @@ RUN apt update && apt install -y \
     && rm -rf /var/lib/apt/lists/*
 
 USER jenkins
-
-RUN pip3 install scan-build --user
