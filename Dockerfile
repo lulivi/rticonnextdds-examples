@@ -3,10 +3,21 @@
 # without express written permission.  Any such copies, or revisions thereof,
 # must display this notice unaltered.
 # This code contains trade secrets of Real-Time Innovations, Inc.
-FROM python:3.8-alpine3.13
+FROM ubuntu:20.04
 
-RUN apk upgrade --update-cache --available \
-    && apk add gcc g++ clang openssl openssl-dev make cmake \
-    && rm -rf /var/cache/apk/*
+ENV DEBIAN_FRONTEND="noninteractive"
+
+RUN apt update && apt install -y \
+    gcc \
+    g++ \
+    clang \
+    libssl-dev \
+    make \
+    cmake \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
 
 USER jenkins
+
+RUN pip3 install scan-build --user

@@ -12,13 +12,19 @@ pipeline {
     stages {
         stage('Download') {
             steps {
-                sh 'python resources/ci_cd/linux_install.py'
+                sh 'python3 resources/ci_cd/linux_install.py'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'python resources/ci_cd/linux_build.py'
+                sh 'python3 resources/ci_cd/linux_build.py'
+            }
+        }
+
+        stage('Static Analysis') {
+            steps {
+                sh 'python3 resources/ci_cd/linux_static_analysis.py'
             }
         }
     }
