@@ -5,7 +5,7 @@
 # This code contains trade secrets of Real-Time Innovations, Inc.
 FROM python:3.8-alpine3.13
 
-RUN apk add gcc clang openssl-dev cmake
+RUN apk add gcc clang openssl-dev make cmake
 
 USER jenkins
 
