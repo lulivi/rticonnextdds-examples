@@ -10,6 +10,7 @@ pipeline {
     stages {
         stage('Download') {
             steps {
+                sh 'pwd'
                 sh 'python resources/ci_cd/linux_install.py'
             }
         }
