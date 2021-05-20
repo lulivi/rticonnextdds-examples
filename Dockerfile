@@ -15,7 +15,9 @@ RUN apt update && apt install -y \
     make \
     cmake \
     python3 \
-    python3-pip \
+    clang-tools-10 \
     && rm -rf /var/lib/apt/lists/*
+
+ENV PATH=/usr/share/clang/scan-build-py-10/bin:${PATH}
 
 USER jenkins
