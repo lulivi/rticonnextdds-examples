@@ -24,7 +24,6 @@ pipeline {
 
         stage('Static Analysis') {
             steps {
-                sh 'pip install scan-build'
                 sh 'python3 resources/ci_cd/linux_static_analysis.py'
             }
         }
