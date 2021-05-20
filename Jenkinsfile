@@ -5,7 +5,7 @@ pipeline {
     environment {
         RTI_MIN_PACKAGE_URL = credentials('rti-min-package-url')
         RTI_PACKAGE_VERSION = credentials('rti-package-version')
-        RTI_INSTALLATION_PATH = "${WORKSPACE}"
+        RTI_INSTALLATION_PATH = "${JENKINS_HOME}"
     }
 
     stages {
