@@ -11,6 +11,7 @@ pipeline {
         stage('Download') {
             steps {
                 sh 'pwd'
+                sh 'cmake --version'
                 sh 'python resources/ci_cd/linux_install.py'
             }
         }
