@@ -1,6 +1,7 @@
 pipeline {
     agent {
         dockerfile {
+            filename 'Dockerfile'
             label 'rti-test-container'
         }
     }
