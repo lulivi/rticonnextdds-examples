@@ -22,14 +22,11 @@ from pathlib import Path
 
 
 def main():
-    rti_installation_path = os.getenv("RTI_INSTALLATION_PATH")
-    rti_installation_path = (
-        Path(rti_installation_path)
-        if rti_installation_path is not None
-        else Path.home()
-    )
-
-    if not rti_installation_path.exists():
+    try:
+        rti_installation_path = Path(
+            os.getenv("RTI_INSTALLATION_PATH") or Path.home()
+        ).resolve(strict=True)
+    except FileNotFoundError:
         sys.exit("The RTI_INSTALLATION_PATH does not exist.")
 
     try:
@@ -41,7 +38,7 @@ def main():
         rti_installation_path.glob("rti_connext_dds-?.?.?")
     )
 
-    if len(found_rti_connext_dds) == 0:
+    if not found_rti_connext_dds:
         sys.exit("Error: RTIConnextDDS not found.")
 
     rti_connext_dds_dir = found_rti_connext_dds[0]
@@ -64,7 +61,7 @@ def main():
         cwd=build_dir,
     )
 
-    if build_gen_result.returncode != 0:
+    if build_gen_result.returncode:
         sys.exit("There was some errors during generating the build system.")
 
     print("\n[RTICommunity] Compiling the examples...", flush=True)
@@ -74,7 +71,7 @@ def main():
         cwd=build_dir,
     )
 
-    if building_result.returncode != 0:
+    if building_result.returncode:
         sys.exit("There was some errors during build.")
 
 
