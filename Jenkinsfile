@@ -54,7 +54,7 @@ pipeline {
         stage('Static Analysis') {
             steps {
                 publishChecks detailsURL: 'https://www.rti.com', name: 'Static Analysis', 
-                    status: 'IN_PROGRESS', summary: 'Analyses for all the examples',
+                    status: 'IN_PROGRESS', summary: 'Analyses all the examples',
                     title: 'Static Analysis'
 
                 sh 'python3 resources/ci_cd/linux_static_analysis.py'
@@ -63,11 +63,11 @@ pipeline {
             post {
                 success {
                     publishChecks detailsURL: 'https://www.rti.com', name: 'Static Analysis',
-                        summary: 'Analyses for all the examples', title: 'Static Analysis'
+                        summary: 'Analyses all the examples', title: 'Static Analysis'
                 }
                 failure {
                     publishChecks conclusion: 'FAILURE', detailsURL: 'https://www.rti.com',
-                        name: 'Static Analysis', summary: 'Analyses for all the examples',
+                        name: 'Static Analysis', summary: 'Analyses all the examples',
                         title: 'Static Analysis'
                 }
             }
