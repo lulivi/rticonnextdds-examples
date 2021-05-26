@@ -13,14 +13,30 @@
 Creates a Markdown file with the output of the Jenkins stages
 """
 
+import os
 import sys
 import platform
 import subprocess
+from pathlib import Path
 
 
 def main():
-    if len(sys.argv) != 2:
-        sys.exit(f"Usage: {sys.argv[0]} <RTI Connext DDS version>")
+    try:
+        rti_installation_path = Path(
+            os.getenv("RTI_INSTALLATION_PATH") or Path.home()
+        ).resolve(strict=True)
+    except FileNotFoundError:
+        sys.exit("The RTI_INSTALLATION_PATH does not exist.")
+
+    found_rti_connext_dds = list(
+        rti_installation_path.glob("rti_connext_dds-?.?.?")
+    )
+
+    if not found_rti_connext_dds:
+        rti_package_version = "-"
+    else:
+        rti_connext_dds_path = str(found_rti_connext_dds[0])
+        rti_package_version = rti_connext_dds_path.split("-")[-1]
 
     text = (
         "This build is being executed on an internal Jenkins, only RTI "
@@ -33,12 +49,12 @@ def main():
         "last staging packages of RTI Connext® DDS and to analyze the build "
         " using `analyze-build` from `clang-tools`.\n\n"
         "# Environment details\n"
-        f"| Option                   | Setting              |\n"
-        f"| ------------------------ | -------------------- |\n"
-        f"| RTI Connext® DDS Version | {sys.argv[1]}        |\n"
-        f"| System                   | {platform.system()}  |\n"
-        f"| Machine type             | {platform.machine()} |\n"
-        f"| OS release               | {platform.release()} |\n"
+        f"| Option                   | Setting               |\n"
+        f"| ------------------------ | --------------------- |\n"
+        f"| RTI Connext® DDS Version | {rti_package_version} |\n"
+        f"| System                   | {platform.system()}   |\n"
+        f"| Machine type             | {platform.machine()}  |\n"
+        f"| OS release               | {platform.release()}  |\n"
     )
 
     if platform.system() == "Linux":
@@ -47,21 +63,21 @@ def main():
             .stdout[:-1]
             .decode("utf-8")
         )
-        text += f"| GCC Version              | {gcc_version}         |\n"
+        text += f"| GCC Version              | {gcc_version}          |\n"
 
         clang_version = (
             subprocess.run(["clang", "-dumpversion"], capture_output=True)
             .stdout[:-1]
             .decode("utf-8")
         )
-        text += f"| CLANG Version            | {clang_version}       |\n"
+        text += f"| CLANG Version            | {clang_version}        |\n"
     elif platform.system() == "Darwin":
         output = subprocess.run(
             ["clang", "--version"], capture_output=True
         ).stdout.decode("utf-8")
         clang_version = output.split("\n")[0]
 
-        text += f"| CLANG Version            | {clang_version}       |\n"
+        text += f"| CLANG Version            | {clang_version}        |\n"
 
     with open("Jenkinsfile", "r") as file:
         text += "\n<details><summary>Jenkinsfile</summary>\n<p>\n"
