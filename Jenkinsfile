@@ -1,3 +1,5 @@
+def DETAILS_URL="https://www.rti.com"
+
 pipeline {
     agent {
         dockerfile true
@@ -11,7 +13,7 @@ pipeline {
     stages {
         stage('Download') {
             steps {
-                publishChecks detailsURL: 'https://www.rti.com', name: 'Download Packages',
+                publishChecks detailsURL: DETAILS_URL, name: 'Download Packages',
                     status: 'IN_PROGRESS', summary: 'Download RTI Connext DDS libraries',
                     title: 'Download Packages'
 
@@ -20,11 +22,11 @@ pipeline {
 
             post {
                 success {
-                    publishChecks detailsURL: 'https://www.rti.com', name: 'Download Packages',
+                    publishChecks detailsURL: DETAILS_URL, name: 'Download Packages',
                         summary: 'Downloads RTI Connext DDS libraries', title: 'Download Packages'
                 }
                 failure {
-                    publishChecks conclusion: 'FAILURE', detailsURL: 'https://www.rti.com',
+                    publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL,
                         name: 'Download Packages', summary: 'Downloads RTI Connext DDS libraries',
                         title: 'Download Packages'
                 }
@@ -33,7 +35,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                publishChecks detailsURL: 'https://www.rti.com', name: 'Build', 
+                publishChecks detailsURL: DETAILS_URL, name: 'Build', 
                     status: 'IN_PROGRESS', summary: 'Build all the examples', title: 'Build'
 
                 sh 'python3 resources/ci_cd/linux_build.py'
@@ -41,11 +43,11 @@ pipeline {
 
             post {
                 success {
-                    publishChecks detailsURL: 'https://www.rti.com', name: 'Build',
+                    publishChecks detailsURL: DETAILS_URL, name: 'Build',
                         summary: 'Build all the examples', title: 'Build'
                 }
                 failure {
-                    publishChecks conclusion: 'FAILURE', detailsURL: 'https://www.rti.com', name: 'Build',
+                    publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL, name: 'Build',
                         summary: 'Build all the examples', title: 'Build'
                 }
             }
@@ -53,7 +55,7 @@ pipeline {
 
         stage('Static Analysis') {
             steps {
-                publishChecks detailsURL: 'https://www.rti.com', name: 'Static Analysis', 
+                publishChecks detailsURL: DETAILS_URL, name: 'Static Analysis', 
                     status: 'IN_PROGRESS', summary: 'Analyses for all the examples',
                     title: 'Static Analysis'
 
@@ -62,11 +64,11 @@ pipeline {
 
             post {
                 success {
-                    publishChecks detailsURL: 'https://www.rti.com', name: 'Static Analysis',
+                    publishChecks detailsURL: DETAILS_URL, name: 'Static Analysis',
                         summary: 'Analyses for all the examples', title: 'Static Analysis'
                 }
                 failure {
-                    publishChecks conclusion: 'FAILURE', detailsURL: 'https://www.rti.com',
+                    publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL,
                         name: 'Static Analysis', summary: 'Analyses for all the examples',
                         title: 'Static Analysis'
                 }
