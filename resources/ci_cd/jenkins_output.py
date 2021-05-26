@@ -25,13 +25,13 @@ def main():
     text = (
         "This build is being executed on an internal Jenkins, only RTI "
         "employers can access the build logs. To give information to external "
-        "users, we have configured the status checks.\n"
+        "users, we have configured the status checks.\n\n"
         "# Pipeline description\n"
         "The pipeline is defined "
         "[here](https://github.com/rticommunity/rticonnextdds-examples/blob/develop/Jenkinsfile) "
         "and the purpose of this pipeline is to build the examples using the "
         "last staging packages of RTI Connext® DDS and to analyze the build "
-        " using `analyze-build` from `clang-tools`.\n"
+        " using `analyze-build` from `clang-tools`.\n\n"
         "# Environment details\n"
         f"| Option                   | Setting              |\n"
         f"| ------------------------ | -------------------- |\n"
@@ -62,6 +62,12 @@ def main():
         clang_version = output.split("\n")[0]
 
         text += f"| CLANG Version            | {clang_version}       |\n"
+
+    with open("Jenkinsfile", "r") as file:
+        text += "\n<details><summary>Jenkinsfile</summary>\n<p>\n"
+        jenkinsfile = file.read()
+        text += f"\n```Groovy\n{jenkinsfile}\n```\n"
+        text += "</p>\n</details>"
 
     with open("jenkins_output.md", "w") as file:
         file.write(text)
