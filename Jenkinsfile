@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Download Packages') {
             steps {
-                sh 'python3 resources/cd_cd/jenkins_output.py -'
+                sh 'python3 resources/ci_cd/jenkins_output.py -'
 
                 script {
                     def detailsText = read("jenkins_output.md")
