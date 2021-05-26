@@ -11,9 +11,9 @@ pipeline {
     }
 
     stages {
-        stage('Download') {
+        stage('Download Packages') {
             steps {
-                publishChecks detailsURL: DETAILS_URL, name: 'Download Packages',
+                publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME,
                     status: 'IN_PROGRESS', summary: 'Download RTI Connext DDS libraries',
                     title: 'Download Packages'
 
@@ -22,20 +22,25 @@ pipeline {
 
             post {
                 success {
-                    publishChecks detailsURL: DETAILS_URL, name: 'Download Packages',
+                    publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME,
                         summary: 'Downloads RTI Connext DDS libraries', title: 'Download Packages'
                 }
                 failure {
                     publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL,
-                        name: 'Download Packages', summary: 'Downloads RTI Connext DDS libraries',
+                        name: STAGE_NAME, summary: 'Downloads RTI Connext DDS libraries',
                         title: 'Download Packages'
+                }
+                aborted {
+                    publishChecks conclusion: 'CANCELED', detailsURL: DETAILS_URL,
+                        name: STAGE_NAME, summary: 'Analyses all the examples',
+                        title: 'Static Analysis'
                 }
             }
         }
 
         stage('Build') {
             steps {
-                publishChecks detailsURL: DETAILS_URL, name: 'Build', 
+                publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME, 
                     status: 'IN_PROGRESS', summary: 'Build all the examples', title: 'Build'
 
                 sh 'python3 resources/ci_cd/linux_build.py'
@@ -43,19 +48,24 @@ pipeline {
 
             post {
                 success {
-                    publishChecks detailsURL: DETAILS_URL, name: 'Build',
+                    publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME,
                         summary: 'Build all the examples', title: 'Build'
                 }
                 failure {
-                    publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL, name: 'Build',
+                    publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL, name: STAGE_NAME,
                         summary: 'Build all the examples', title: 'Build'
+                }
+                aborted {
+                    publishChecks conclusion: 'CANCELED', detailsURL: DETAILS_URL,
+                        name: STAGE_NAME, summary: 'Analyses all the examples',
+                        title: 'Static Analysis'
                 }
             }
         }
 
         stage('Static Analysis') {
             steps {
-                publishChecks detailsURL: DETAILS_URL, name: 'Static Analysis', 
+                publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME, 
                     status: 'IN_PROGRESS', summary: 'Analyses all the examples',
                     title: 'Static Analysis'
 
@@ -64,12 +74,17 @@ pipeline {
 
             post {
                 success {
-                    publishChecks detailsURL: DETAILS_URL, name: 'Static Analysis',
+                    publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME,
                         summary: 'Analyses all the examples', title: 'Static Analysis'
                 }
                 failure {
                     publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL,
-                        name: 'Static Analysis', summary: 'Analyses all the examples',
+                        name: STAGE_NAME, summary: 'Analyses all the examples',
+                        title: 'Static Analysis'
+                }
+                aborted {
+                    publishChecks conclusion: 'CANCELED', detailsURL: DETAILS_URL,
+                        name: STAGE_NAME, summary: 'Analyses all the examples',
                         title: 'Static Analysis'
                 }
             }
