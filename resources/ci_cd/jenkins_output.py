@@ -42,23 +42,26 @@ def main():
     )
 
     if platform.system() == "Linux":
-        gcc_version = subprocess.run(
-            ["gcc", "-dumpfullversion"], capture_output=True
-        ).stdout[:-1].decode("utf-8")
+        gcc_version = (
+            subprocess.run(["gcc", "-dumpfullversion"], capture_output=True)
+            .stdout[:-1]
+            .decode("utf-8")
+        )
         text += f"| GCC Version              | {gcc_version}         |\n"
 
-        clang_version = subprocess.run(
-            ["clang", "-dumpversion"], capture_output=True
-        ).stdout[:-1].decode("utf-8")
+        clang_version = (
+            subprocess.run(["clang", "-dumpversion"], capture_output=True)
+            .stdout[:-1]
+            .decode("utf-8")
+        )
         text += f"| CLANG Version            | {clang_version}       |\n"
     elif platform.system() == "Darwin":
         output = subprocess.run(
             ["clang", "--version"], capture_output=True
         ).stdout.decode("utf-8")
-        clang_version = output.split('\n')[0]
+        clang_version = output.split("\n")[0]
 
         text += f"| CLANG Version            | {clang_version}       |\n"
-        
 
     with open("jenkins_output.md", "w") as file:
         file.write(text)
