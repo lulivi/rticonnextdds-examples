@@ -13,9 +13,15 @@ pipeline {
     stages {
         stage('Download Packages') {
             steps {
+                sh 'python3 resources/cd_cd/jenkins_output.py -'
+
+                script {
+                    def detailsText = read("jenkins_output.md")
+                }
+
                 publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME,
                     status: 'IN_PROGRESS', summary: 'Download RTI Connext DDS libraries',
-                    title: 'Download Packages'
+                    title: 'Download Packages', text: detailsText
 
                 sh 'python3 resources/ci_cd/linux_install.py'
             }
