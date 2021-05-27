@@ -18,6 +18,7 @@ import sys
 import platform
 import subprocess
 from pathlib import Path
+from textwrap import dedent
 
 
 def main():
@@ -38,24 +39,29 @@ def main():
         rti_connext_dds_path = str(found_rti_connext_dds[0])
         rti_package_version = rti_connext_dds_path.split("-")[-1]
 
-    text = (
-        "This build is being executed on an internal Jenkins, only RTI "
-        "employers can access the build logs. To give information to external "
-        "users, we have configured the status checks.\n\n"
-        "# Pipeline description\n"
-        "The pipeline is defined "
-        "[here](https://github.com/rticommunity/rticonnextdds-examples/blob/develop/Jenkinsfile) "
-        "and the purpose of this pipeline is to build the examples using the "
-        "last staging packages of RTI Connext® DDS and to analyze the build "
-        " using `analyze-build` from `clang-tools`.\n\n"
-        "# Environment details\n"
-        f"| Option                   | Setting               |\n"
-        f"| ------------------------ | --------------------- |\n"
-        f"| RTI Connext® DDS Version | {rti_package_version} |\n"
-        f"| System                   | {platform.system()}   |\n"
-        f"| Machine type             | {platform.machine()}  |\n"
-        f"| OS release               | {platform.release()}  |\n"
-    )
+    text = f"""\
+        This build is being executed on an internal Jenkins, only RTI
+        employers can access the build logs. To give information to external
+        users, we have configured the status checks.
+
+        # Pipeline description
+        The pipeline is defined
+        [here](https://github.com/rticommunity/rticonnextdds-examples/blob/develop/Jenkinsfile)
+        and the purpose of this pipeline is to build the examples using the
+        last staging packages of RTI Connext® DDS and to analyze the build
+        using `analyze-build` from `clang-tools`.
+
+        # Environment details
+
+        | Option                   | Setting               |
+        | ------------------------ | --------------------- |
+        | RTI Connext® DDS Version | {rti_package_version} |
+        | System                   | {platform.system()}   |
+        | Machine type             | {platform.machine()}  |
+        | OS release               | {platform.release()}  |
+    """
+
+    text= dedent(text)
 
     if platform.system() == "Linux":
         gcc_version = (
@@ -78,6 +84,13 @@ def main():
         clang_version = output.split("\n")[0]
 
         text += f"| CLANG Version            | {clang_version}        |\n"
+
+
+    with open("Dockerfile", "r") as file:
+        text += "\n\n<details><summary>Dockerfile</summary>\n<p>\n"
+        dockerfile = file.read()
+        text += f"\n```Dockerfile\n{dockerfile}\n```\n"
+        text += "</p>\n</details>"
 
     with open("Jenkinsfile", "r") as file:
         text += "\n<details><summary>Jenkinsfile</summary>\n<p>\n"
