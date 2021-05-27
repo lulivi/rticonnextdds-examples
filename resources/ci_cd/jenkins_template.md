@@ -1,8 +1,10 @@
+<!-- markdownlint-disable MD033 MD041 -->
 This build is being executed on an internal Jenkins, only RTI employers can
 access the build logs. To give information to external users, we have
 configured the status checks.
 
 # Pipeline description
+
 The pipeline is defined [here](https://github.com/rticommunity/rticonnextdds-examples/blob/develop/Jenkinsfile)
 and the purpose of this pipeline is to build the examples using the last
 staging packages of RTI Connext® DDS and to analyze the build using
@@ -24,6 +26,7 @@ staging packages of RTI Connext® DDS and to analyze the build using
 ```Dockerfile
 @DOCKERFILE@
 ```
+
 </p>
 </details>
 
@@ -33,5 +36,6 @@ staging packages of RTI Connext® DDS and to analyze the build using
 ```Groovy
 @JENKINSFILE@
 ```
+
 </p>
 </details>
