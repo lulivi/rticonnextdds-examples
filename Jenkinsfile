@@ -41,12 +41,12 @@ pipeline {
                 failure {
                     publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL,
                         name: STAGE_NAME, title: 'Failed', text: detailsText,
-                        summary: ':warning: Failed downloading RTI Connext DDS libraries.',
+                        summary: ':warning: Failed downloading RTI Connext DDS libraries.'
                 }
                 aborted {
                     publishChecks conclusion: 'CANCELED', detailsURL: DETAILS_URL,
                         name: STAGE_NAME, title: 'Aborted', text: detailsText,
-                        summary: ':no_entry: The download of RTI Connext DDS libraries was aborted.',
+                        summary: ':no_entry: The download of RTI Connext DDS libraries was aborted.'
                 }
             }
         }
