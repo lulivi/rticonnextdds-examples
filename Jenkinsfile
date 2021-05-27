@@ -22,7 +22,7 @@ pipeline {
 
                 publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME,
                     status: 'IN_PROGRESS', title: 'Downloading', text: detailsText,
-                    summary: ':arrow_down: Downloading RTI Connext DDS libraries...',
+                    summary: ':arrow_down: Downloading RTI Connext DDS libraries...'
 
                 sh 'python3 resources/ci_cd/linux_install.py'
                 sh 'python3 resources/ci_cd/jenkins_output.py'
@@ -69,12 +69,12 @@ pipeline {
                 failure {
                     publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL,
                         name: STAGE_NAME, title: 'Failed', text: detailsText,
-                        summary: ':warning: There was an error building the examples.',
+                        summary: ':warning: There was an error building the examples.'
                 }
                 aborted {
                     publishChecks conclusion: 'CANCELED', detailsURL: DETAILS_URL,
-                        name: STAGE_NAME, title: 'Aborted', text: detailsText
-                        summary: ':no_entry: The examples build was aborted',
+                        name: STAGE_NAME, title: 'Aborted', text: detailsText,
+                        summary: ':no_entry: The examples build was aborted'
                 }
             }
         }
@@ -83,7 +83,7 @@ pipeline {
             steps {
                 publishChecks detailsURL: DETAILS_URL, name: STAGE_NAME, 
                     status: 'IN_PROGRESS', title: 'In progress', text: detailsText,
-                    summary: ':mag: Analysing all the examples...',
+                    summary: ':mag: Analysing all the examples...'
 
                 sh 'python3 resources/ci_cd/linux_static_analysis.py'
             }
@@ -96,13 +96,13 @@ pipeline {
                 }
                 failure {
                     publishChecks conclusion: 'FAILURE', detailsURL: DETAILS_URL,
-                        name: STAGE_NAME, title: 'Failed', text: detailsText
-                        summary: ':warning: The static analysis failed',
+                        name: STAGE_NAME, title: 'Failed', text: detailsText,
+                        summary: ':warning: The static analysis failed'
                 }
                 aborted {
                     publishChecks conclusion: 'CANCELED', detailsURL: DETAILS_URL,
                         name: STAGE_NAME, title: 'Aborted', text: detailsText,
-                        summary: ':no_entry: The static analysis was aborted',
+                        summary: ':no_entry: The static analysis was aborted'
                 }
             }
         }
