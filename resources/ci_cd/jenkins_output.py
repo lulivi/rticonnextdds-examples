@@ -39,29 +39,13 @@ def main():
         rti_connext_dds_path = str(found_rti_connext_dds[0])
         rti_package_version = rti_connext_dds_path.split("-")[-1]
 
-    text = f"""\
-        This build is being executed on an internal Jenkins, only RTI
-        employers can access the build logs. To give information to external
-        users, we have configured the status checks.
+    with open("resources/ci_cd/jenkins_template.md", "r") as file:
+        text = file.read()
 
-        # Pipeline description
-        The pipeline is defined
-        [here](https://github.com/rticommunity/rticonnextdds-examples/blob/develop/Jenkinsfile)
-        and the purpose of this pipeline is to build the examples using the
-        last staging packages of RTI Connext® DDS and to analyze the build
-        using `analyze-build` from `clang-tools`.
-
-        # Environment details
-
-        | Option                   | Setting               |
-        | ------------------------ | --------------------- |
-        | RTI Connext® DDS Version | {rti_package_version} |
-        | System                   | {platform.system()}   |
-        | Machine type             | {platform.machine()}  |
-        | OS release               | {platform.release()}  |
-    """
-
-    text = dedent(text)
+    text = text.replace("@RTI_PACKAGE_VERSION@", rti_package_version)
+    text = text.replace("@OPERATING_SYSTEM@", platform.system())
+    text = text.replace("@MACHINE_TYPE@", platform.machine())
+    text = text.replace("@OS_VERSION@", platform.release())
 
     if platform.system() == "Linux":
         gcc_version = (
@@ -69,33 +53,33 @@ def main():
             .stdout[:-1]
             .decode("utf-8")
         )
-        text += f"| GCC Version              | {gcc_version}          |\n"
+        extra_rows = f"| GCC Version | {gcc_version} |\n"
 
         clang_version = (
             subprocess.run(["clang", "-dumpversion"], capture_output=True)
             .stdout[:-1]
             .decode("utf-8")
         )
-        text += f"| CLANG Version            | {clang_version}        |\n"
+        extra_rows = f"| CLANG Version | {clang_version} |\n"
     elif platform.system() == "Darwin":
         output = subprocess.run(
             ["clang", "--version"], capture_output=True
         ).stdout.decode("utf-8")
         clang_version = output.split("\n")[0]
 
-        text += f"| CLANG Version            | {clang_version}        |\n"
+        extra_rows = f"| CLANG Version | {clang_version} |\n"
+
+    text = text.replace("@EXTRA_ROWS@", extra_rows)
 
     with open("Dockerfile", "r") as file:
-        text += "\n\n<details><summary>Dockerfile</summary>\n<p>\n"
         dockerfile = file.read()
-        text += f"\n```Dockerfile\n{dockerfile}\n```\n"
-        text += "</p>\n</details>"
+
+    text = text.replace("@DOCKERFILE@", dockerfile)
 
     with open("Jenkinsfile", "r") as file:
-        text += "\n<details><summary>Jenkinsfile</summary>\n<p>\n"
         jenkinsfile = file.read()
-        text += f"\n```Groovy\n{jenkinsfile}\n```\n"
-        text += "</p>\n</details>"
+
+    text = text.replace("@JENKINSFILE@", jenkinsfile)
 
     with open("jenkins_output.md", "w") as file:
         file.write(text)
