@@ -61,7 +61,7 @@ def main():
         | OS release               | {platform.release()}  |
     """
 
-    text= dedent(text)
+    text = dedent(text)
 
     if platform.system() == "Linux":
         gcc_version = (
@@ -84,7 +84,6 @@ def main():
         clang_version = output.split("\n")[0]
 
         text += f"| CLANG Version            | {clang_version}        |\n"
-
 
     with open("Dockerfile", "r") as file:
         text += "\n\n<details><summary>Dockerfile</summary>\n<p>\n"
