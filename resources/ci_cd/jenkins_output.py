@@ -18,7 +18,6 @@ import sys
 import platform
 import subprocess
 from pathlib import Path
-from textwrap import dedent
 
 
 def main():
