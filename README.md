@@ -1,4 +1,4 @@
-<!-- Hi -->
+<!-- Hi,  -->
 # rticonnextdds-examples
 
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/rticommunity/rticonnextdds-examples/build/master)](https://github.com/rticommunity/rticonnextdds-examples/actions/workflows/build.yml)
