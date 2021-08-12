@@ -36,12 +36,12 @@ jobs:
 
     steps:
       - name: Setenv (Linux)
-        if: ${{ runner.os == 'ubuntu-20.04' }}
+        if: ${{ runner.os == 'Linux' }}
         run: |
           echo "RTI_MIN_PACKAGE_URL=${{ secrets.LINUX_RTI_MIN_PACKAGE_URL }}" >> $GITHUB_ENV
 
       - name: Setenv (Windows)
-        if: ${{ runner.os == 'windows-2016' }}
+        if: ${{ runner.os == 'Windows' }}
         run: |
           echo "RTI_MIN_PACKAGE_URL=${{ secrets.WINDOWS_RTI_MIN_PACKAGE_URL }}" >> $GITHUB_ENV
 
@@ -122,7 +122,7 @@ jobs:
 
       - name: Peform the static analysis test
         run: python resources/ci_cd/linux_static_analysis.py
-        if: ${{ runner.os == 'ubuntu-20.04' }}
+        if: ${{ runner.os == 'Linux' }}
 
 
   commentpr:
