@@ -15,6 +15,7 @@ correct RTIConnextDDS package version.
 
 """
 import os
+import platform
 import sys
 import subprocess
 
@@ -48,18 +49,20 @@ def main():
 
     print("[RTICommunity] Generating build system...", flush=True)
 
-    build_gen_result = subprocess.run(
-        [
-            "cmake",
-            "-DSTATIC_ANALYSIS=ON",
-            "-DBUILD_SHARED_LIBS=ON",
-            "-DCMAKE_BUILD_TYPE=Release",
-            "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-            f"-DCONNEXTDDS_DIR={rti_connext_dds_dir}",
-            examples_dir,
-        ],
-        cwd=build_dir,
-    )
+    command = [
+        "cmake",
+        "-DSTATIC_ANALYSIS=ON",
+        "-DBUILD_SHARED_LIBS=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        f"-DCONNEXTDDS_DIR={rti_connext_dds_dir}",
+        examples_dir,
+    ]
+
+    if platform.system() == "Windows":
+        command += ["-G", "Visual Studio 15 2017", "-A", "x64"]
+
+    build_gen_result = subprocess.run(command, cwd=build_dir)
 
     if build_gen_result.returncode:
         sys.exit("There was some errors during generating the build system.")
