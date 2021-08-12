@@ -55,7 +55,7 @@ def main():
         "-DBUILD_SHARED_LIBS=ON",
         "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-        f"-DCONNEXTDDS_DIR={rti_connext_dds_dir}",
+        f"-DCONNEXTDDS_DIR={str(rti_connext_dds_dir)}",
         examples_dir,
     ]
 
