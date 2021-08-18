@@ -56,7 +56,7 @@ def main():
         "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
         f"-DCONNEXTDDS_DIR={str(rti_connext_dds_dir)}",
-        examples_dir,
+        str(examples_dir),
     ]
 
     if platform.system() == "Windows":
