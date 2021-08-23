@@ -470,7 +470,7 @@ if(OPENSSL_INCLUDE_DIR)
     # does not support the rpath mechanism. The libraries are tipically located
     # in the bin dir. We use the lib and the bin directory.
     get_filename_component(lib_dir ${${ssl_basename_var}_LIBRARY} DIRECTORY)
-    get_filename_component(parent_dir ${lib_dir} DIRECTORY)
+    get_filename_component(parent_dir lib_dir DIRECTORY)
     set(OPENSSL_PATH_ENV)
     if (WIN32 AND BUILD_SHARED_LIBS)
         set(OPENSSL_BIN "${parent_dir}/bin")
