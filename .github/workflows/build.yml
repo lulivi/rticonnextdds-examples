@@ -128,7 +128,6 @@ jobs:
 
       # This script will compile the examples and execute the static analysis.
       - name: Build all the examples
-        if: ${{ runner.os != 'Windows' }}
         run: python resources/ci_cd/linux_build.py
 
       - name: Peform the static analysis test
