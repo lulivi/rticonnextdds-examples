@@ -10,9 +10,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  GITHUB_WORKSPACE: ${{ env.HOME }}
-
 on:
   push:
     branches:
@@ -51,6 +48,7 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         run: |
           echo "RTI_MIN_PACKAGE_URL=${{ secrets.WINDOWS_RTI_MIN_PACKAGE_URL }}" >> $GITHUB_ENV
+          echo "GITHUB_WORKSPACE=D:/a/" >> $GITHUB_ENV
 
       - name: Setenv (macOS)
         if: ${{ runner.os == 'macOS' }}
