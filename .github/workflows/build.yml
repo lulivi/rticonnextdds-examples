@@ -121,16 +121,15 @@ jobs:
       - name: Install RTI Connext DDS
         run: python resources/ci_cd/linux_install.py
 
+      - name: Activate LongPath (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -value 1
+
       # This script will compile the examples and execute the static analysis.
       - name: Build all the examples
         if: ${{ runner.os != 'Windows' }}
         run: python resources/ci_cd/linux_build.py
-
-      - name: Build all the examples (Windows)
-        if: ${{ runner.os == 'Windows' }}
-        run: |
-          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -value 1
-          python resources/ci_cd/linux_build.py
 
       - name: Peform the static analysis test
         run: python resources/ci_cd/linux_static_analysis.py
