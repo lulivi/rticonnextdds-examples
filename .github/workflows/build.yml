@@ -9,6 +9,7 @@ name: Build and run static analysis
 defaults:
   run:
     shell: bash
+    working-directory: /home/rti
 
 on:
   push:
