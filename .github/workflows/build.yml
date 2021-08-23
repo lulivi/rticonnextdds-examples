@@ -9,7 +9,9 @@ name: Build and run static analysis
 defaults:
   run:
     shell: bash
-    working-directory: /home/rti
+
+env:
+  GITHUB_WORKSPACE: ${{ env.HOME }}
 
 on:
   push:
