@@ -60,7 +60,7 @@ def main():
     ]
 
     if platform.system() == "Windows":
-        command += ["-G", "Visual Studio 16 2019", "-A", "x64"]
+        command += ["-G", "Visual Studio 15 2017", "-A", "x64"]
 
     build_gen_result = subprocess.run(command, cwd=build_dir)
 
