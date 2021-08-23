@@ -6,10 +6,6 @@
 # it will execute a checkout to get all the changes.
 name: Build and run static analysis
 
-defaults:
-  run:
-    shell: bash
-
 on:
   push:
     branches:
@@ -19,6 +15,10 @@ on:
     workflows: ["PR handler"]
     types:
       - completed
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
@@ -129,6 +129,11 @@ jobs:
       # This script will compile the examples and execute the static analysis.
       - name: Build all the examples
         run: python resources/ci_cd/linux_build.py
+
+      - name: Build all the examples (Windows)
+        run: |
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -value 1
+          python resources/ci_cd/linux_build.py
 
       - name: Peform the static analysis test
         run: python resources/ci_cd/linux_static_analysis.py
