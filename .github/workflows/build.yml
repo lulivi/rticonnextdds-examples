@@ -38,7 +38,7 @@ jobs:
       - name: Check LongPathsEnabled
         if: ${{ runner.os == 'Windows' }}
         run: |
-        (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
+          (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
 
       - name: Setenv (Linux)
         if: ${{ runner.os == 'Linux' }}
