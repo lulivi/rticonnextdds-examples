@@ -20,6 +20,8 @@ if(NOT RTIConnextDDS_FOUND)
     )
 endif()
 
+set (CMAKE_CXX_STANDARD 11)
+
 add_executable(dynamic_data_nested_struct_cxx2
     "${CMAKE_CURRENT_SOURCE_DIR}/dynamic_data_nested_struct_example.cxx"
 )

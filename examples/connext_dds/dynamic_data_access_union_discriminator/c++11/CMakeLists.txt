@@ -10,6 +10,16 @@ set(CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/../../../../resources/cmake"
 )
 
+# Find the ConnextDDS libraries. This will look for core and API libraries
+find_package(RTIConnextDDS
+    "6.1.0"
+    REQUIRED
+    COMPONENTS
+        core
+)
+
+set (CMAKE_CXX_STANDARD 11)
+
 add_executable(dynamic_data_union_example_cxx2
     "${CMAKE_CURRENT_SOURCE_DIR}/dynamic_data_union_example.cxx"
 )
