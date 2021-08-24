@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-11]
+        os: [ubuntu-20.04, macos-11, windows-2016]
 
     # This job will be executed if the "PR handler" finalized successfully or
     # if this workflow was triggered by a push event.
@@ -35,6 +35,11 @@ jobs:
       pr_number: ${{ steps.pr_number.outputs.PR_NUMBER }}
 
     steps:
+      - name: Check LongPathsEnabled
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+        (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
+
       - name: Setenv (Linux)
         if: ${{ runner.os == 'Linux' }}
         run: |
@@ -121,12 +126,6 @@ jobs:
       # compiling the examples
       - name: Install RTI Connext DDS
         run: python resources/ci_cd/linux_install.py
-
-      - name: Activate LongPath (Windows)
-        if: ${{ runner.os == 'Windows' }}
-        run: |
-          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
-          git config --system core.longpaths true
 
       # This script will compile the examples and execute the static analysis.
       - name: Build all the examples
