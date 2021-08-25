@@ -132,7 +132,8 @@ jobs:
         working-directory: D:\a
         run: |
           new-item -itemtype symboliclink -path . -name rti -value D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}
-          python rti\resources\ci_cd\linux_build.py
+          cd rti
+          python resources\ci_cd\linux_build.py
 
       # This script will compile the examples and execute the static analysis.
       - name: Build all the examples
