@@ -131,7 +131,7 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         working-directory: D:\a
         run: |
-          new-item -itemtype HardLink -path . -name rti -value D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}
+          new-item -itemtype Junction -path . -name rti -value D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}
           cd rti
           python resources\ci_cd\linux_build.py
 
