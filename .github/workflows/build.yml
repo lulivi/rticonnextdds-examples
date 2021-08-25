@@ -131,6 +131,7 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         working-directory: D:\a
         run: |
+          New-Item -ItemType directory -Path D:\a\rti
           Copy-Item -Path "D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}\*" -Destination D:\a\rti -Recurse
           cd rti
           python resources\ci_cd\linux_build.py
