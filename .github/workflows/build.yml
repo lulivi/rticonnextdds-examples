@@ -131,7 +131,7 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         working-directory: D:\a
         run: |
-          new-item -itemtype symboliclink -path . -name rti -value D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}
+          Copy-Item -Path "D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}\*" -Destination D:\a\rti -Recurse
           cd rti
           python resources\ci_cd\linux_build.py
 
