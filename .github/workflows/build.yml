@@ -127,16 +127,20 @@ jobs:
       - name: Install RTI Connext DDS
         run: python resources/ci_cd/linux_install.py
 
-      - name: Build all the examples
+      # This step will move the examples directory to a shorter path to avoid
+      # limitations in path length. Then it will call the script that builds all
+      # the examples.
+      - name: Build all the examples (Windows)
         if: ${{ runner.os == 'Windows' }}
         working-directory: D:\a
         run: |
-          new-item -itemtype Junction -path . -name rti -value D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}
+          New-Item -ItemType directory -Path D:\a\rti
+          Copy-Item -Path "D:\a\${{ github.event.repository.name }}\${{ github.event.repository.name }}\*" -Destination D:\a\rti -Recurse
           cd rti
           python resources\ci_cd\linux_build.py
 
-      # This script will compile the examples and execute the static analysis.
-      - name: Build all the examples
+      # This script will compile the examples in Linux & macOS
+      - name: Build all the examples (Linux & macOS)
         if: ${{ runner.os != 'Windows' }}
         run: python resources/ci_cd/linux_build.py
 
